@@ -18,6 +18,7 @@ async function saveSettings(settingsId, settings) {
                 likes: settings.likes,
                 dislikes: settings.dislikes,
                 hardRequirements: settings.hardRequirements,
+                mealCount: settings.mealCount
             },
         };
 
@@ -33,12 +34,13 @@ async function saveSettings(settingsId, settings) {
 export default async function handler(req, res) {
   // Check for the HTTP method if needed, e.g., if it's a POST or GET request
   if (req.method === 'POST') {
-    const { _id, likes, dislikes, hardRequirements } = req.body;
+    const { _id, likes, dislikes, hardRequirements, mealCount } = req.body;
 
     const settings = {
         likes,
         dislikes,
         hardRequirements,
+        mealCount
       };
 
     console.log(settings);

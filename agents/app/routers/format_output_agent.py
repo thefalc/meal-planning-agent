@@ -23,6 +23,7 @@ SYSTEM_PROMPT = """You are a system that processes meal plans and reformats them
     Your task is to extract key details and output a JSON payload with the following structure:
     {
         "summary": <string>,
+        "groceryList": <string>,
         "meals": [
             {
                 "title": <string>,
@@ -37,13 +38,14 @@ SYSTEM_PROMPT = """You are a system that processes meal plans and reformats them
     Instructions:
 
     1. For the summary, create a short summary for the meals of the week including the meal names.
-    2. For each meal in the input:
+    2. For the groceryList, analyze the existing meals and create a list of grocery items required. Format the grocery list as HTML as shown in the example.
+    3. For each meal in the input:
         - Extract the meal title and assign it to title.
         - Identify the core ingredients and list them in coreIngredients.
         - Extract the description for the kids' version and assign it to kidsVersion.
         - Extract the description for the adult version and assign it to adultVersion.
         - Extract the basic recipe and assign it to recipe.
-    3. Ensure all extracted data is clean, properly formatted, and follows the given JSON structure.
+    4. Ensure all extracted data is clean, properly formatted, and follows the given JSON structure.
     
     Example Input:
 
@@ -125,6 +127,38 @@ SYSTEM_PROMPT = """You are a system that processes meal plans and reformats them
     Example Output:
     {
         "summary": "Family pasta bake and teriyaki protein plate",
+        "grocyerList": "<p><strong>Proteins:</strong></p>
+            <ul>
+                <li>Ground chicken (1 lb for pasta bake, 1 lb for teriyaki plate)</li>
+            </ul>
+            <p><strong>Pasta and Noodles:</strong></p>
+            <ul>
+                <li>Pasta (e.g., penne or fusilli, 12 oz)</li>
+                <li>Udon noodles (10 oz)</li>
+            </ul>
+            <p><strong>Vegetables:</strong></p>
+            <ul>
+                <li>Broccoli (2 cups)</li>
+                <li>Mixed vegetables (e.g., bell peppers, broccoli, carrots, zucchini, snap peas, 3 cups total)</li>
+            </ul>
+            <p><strong>Cheese:</strong></p>
+            <ul>
+                <li>Shredded cheese (cheddar or mozzarella, 2 cups + 1/2 cup extra for kids)</li>
+                <li>Parmesan cheese (1/4 cup)</li>
+            </ul>
+            <p><strong>Sauces and Seasonings:</strong></p>
+            <ul>
+                <li>Teriyaki sauce (1/2 cup mild for kids, regular or spicy for adults)</li>
+                <li>Chili oil (1 tsp or to taste)</li>
+                <li>Mixed dried herbs (e.g., oregano, basil, thyme, 1 tsp)</li>
+                <li>Red pepper flakes (optional, 1/2 tsp)</li>
+                <li>Salt and pepper</li>
+            </ul>
+            <p><strong>Other Pantry Items:</strong></p>
+            <ul>
+                <li>Olive oil (2 tbsp)</li>
+                <li>Vegetable oil (2 tbsp)</li>
+            </ul>",
         "meals": [
             {
                 "title": "Family Pasta Bake",
@@ -252,4 +286,4 @@ async def format_output_agent(request: Request):
 
             asyncio.create_task(start_agent_flow(request_id, meal_plan))
 
-            return Response(content="Formatting Output Agent Started", media_type="text/plain", status_code=200)
+        return Response(content="Formatting Output Agent Started", media_type="text/plain", status_code=200)

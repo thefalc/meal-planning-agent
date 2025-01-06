@@ -4,7 +4,7 @@ from langgraph.prebuilt import create_react_agent
 from dotenv import load_dotenv
 import json
 import asyncio
-from ..utils.common_utils import get_kid_preferences, get_hard_requirements, get_recent_meals, get_current_date
+from ..utils.common_utils import get_kid_preferences, get_hard_requirements, get_recent_meals, get_meal_count
 from ..utils.publish_to_topic import produce
 from ..utils.constants import CHILD_PREFERENCES_OUTPUT_TOPIC
 
@@ -29,7 +29,9 @@ SYSTEM_PROMPT = """You are an expert at designing nutritious meals that toddlers
 graph = create_react_agent(model, tools=tools, state_modifier=SYSTEM_PROMPT)
 
 async def start_agent_flow(request_id):
-    inputs = {"messages": [("user", "Plan 4 dinners for my children.")]}
+    meal_count = get_meal_count()
+
+    inputs = {"messages": [("user", f"Plan {meal_count} dinners for my children.")]}
     response = await graph.ainvoke(inputs)
 
     last_message_content = response["messages"][-1]

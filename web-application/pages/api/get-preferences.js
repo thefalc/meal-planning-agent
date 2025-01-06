@@ -15,7 +15,7 @@ async function getSettings() {
     const collection = database.collection("meal_preferences");
 
     settings = await collection
-      .findOne({}, { projection: { _id: 1, likes: 1, dislikes: 1, hardRequirements: 1 } });
+      .findOne({}, { projection: { _id: 1, likes: 1, dislikes: 1, hardRequirements: 1, mealCount: 1 } });
 
     console.log(settings);
   } catch (error) {

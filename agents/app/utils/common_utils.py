@@ -54,7 +54,7 @@ def get_hard_requirements():
     return result
 
 
-# @tool
+@tool
 def get_recent_meals():
     """Use this to get recent meals."""
     # Connect to the MongoDB instance
@@ -80,3 +80,18 @@ def get_first_day_of_week():
     start_of_week = current_date - timedelta(days=current_date.weekday())
 
     return start_of_week.strftime('%Y-%m-%d')
+
+
+def get_meal_count():
+    """Use this to get how many meals to plan for."""
+    # Connect to the MongoDB instance
+    client = MongoClient(os.getenv("MONGODB_URI"))  # Replace with your MongoDB URI\
+    
+    # Access the database and collection
+    db = client['meal_planner']
+    collection = db['meal_preferences']
+
+    projection = {"mealCount": 1, "_id": 0} 
+    result = collection.find_one({}, projection)
+
+    return result.get("mealCount")
